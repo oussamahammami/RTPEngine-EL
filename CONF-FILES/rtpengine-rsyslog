@@ -1,0 +1,2 @@
+# rtpengine log
+local1.*                                                /var/log/rtpengine.log
