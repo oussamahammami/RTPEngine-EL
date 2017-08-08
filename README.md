@@ -1,6 +1,6 @@
 # RTPengine for Enterprise Linux
 
-> Documentation powred by [Rebtel](https://www.rebtel.com/en/), ENJOY :stuck_out_tongue_closed_eyes: !
+> Documentation powered by [Rebtel](https://www.rebtel.com/en/), ENJOY :stuck_out_tongue_closed_eyes:
 
 ## Installing from RPMs
 
