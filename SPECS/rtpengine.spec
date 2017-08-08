@@ -75,7 +75,7 @@ install -D -p -m755 el/%{binname}-stop-post %{buildroot}%{_sbindir}/%{binname}-s
 install -D -p -m644 el/%{binname}-conf \
 	%{buildroot}%{_sysconfdir}/default/%{binname}-conf
 install -D -p -m644 el/%{binname}.service \
-	%{buildroot}%{_libdir}/systemd/system/%{binname}.service
+	%{buildroot}%{_prefix}/lib/systemd/system/%{binname}.service
 install -D -p -m644 el/%{binname}-rsyslog  \
         %{buildroot}%{_sysconfdir}/rsyslog.d/%{binname}.conf
 install -D -p -m644 el/%{binname}-logrotation  \
@@ -110,10 +110,8 @@ getent passwd %{name} >/dev/null || /usr/sbin/useradd -r -g %{name} \
 
 
 %post
-if [ $1 -eq 1 ]; then
-        /sbin/chkconfig --add %{name} || :
-fi
-
+systemctl enable %{name} > /dev/null 2>&1
+systemctl restart rsyslog > /dev/null 2>&1 
 
 %post kernel
 # Add to DKMS registry, build, and install module
@@ -126,11 +124,8 @@ true
 
 
 %preun
-if [ $1 = 0 ] ; then
-        /sbin/service %{name} stop >/dev/null 2>&1
-        /sbin/chkconfig --del %{name}
-fi
-
+systemctl stop %{name} > /dev/null 2>&1
+systemctl disable %{name} > /dev/null 2>&1
 
 %preun kernel
 # Remove from DKMS registry
@@ -150,7 +145,8 @@ true
 %{_sbindir}/%{binname}-stop-post
 %config(noreplace) %{_sysconfdir}/default/%{binname}-conf
 #%config(noreplace) %{_sysconfdir}/sysconfig/%{binname}
-%{_libdir}/systemd/system/%{binname}.service
+%{_prefix}/lib/systemd/system/%{binname}.service
+
 # rsyslog conf
 %{_sysconfdir}/rsyslog.d/%{binname}.conf
 # log rotation conf
@@ -179,10 +175,10 @@ true
   - replace package dkms by kernel-source
   - change name package name from kernel to iptables
 * Thu Nov 24 2016 Marcel Weinberg <marcel@ng-voice.com>
-  - Updated to ngcp-rtpengine version 4.5.0 and CentOS 7.2 
+  - Updated to ngcp-rtpengine version 4.5.0 and CentOS 7.2
   - created a new variable "binname" to use rtpengine as name for the binaries
     (still using ngcp-rtpenginge as name of the package and daemon - aligned to the .deb packages)
-  - fixed dependencies 
+  - fixed dependencies
 * Mon Nov 11 2013 Peter Dunkley <peter.dunkley@crocodilertc.net>
   - Updated version to 2.3.2
   - Set license to GPLv3
