@@ -1,7 +1,5 @@
 # RTPengine for Enterprise Linux
 
-> Documentation powered by [Rebtel](https://www.rebtel.com/en/), ENJOY :stuck_out_tongue_closed_eyes:
-
 ## Installing from RPMs
 
 There are three RPMs:
